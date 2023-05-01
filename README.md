@@ -1,4 +1,4 @@
-# Phone Book app
+# Records App
 
 ![Alt text](/public/images/createRecord.jpg "Create Records")
 ![Alt text](/public/images/viewRecords.jpg "View Records")

@@ -21,6 +21,7 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            
 
                             <div class="form-group">
                                 <label for="username">Username:</label>
@@ -82,6 +83,10 @@
                         </div>
                         
                         <script>
+                            const dateInput = document.getElementById('date_created');
+                            dateInput.addEventListener('input', () => {
+                                dateInput.blur(); // close the calendar
+                            });
                             // Get the modal element
                             var modal = document.getElementById('myModal');
                     

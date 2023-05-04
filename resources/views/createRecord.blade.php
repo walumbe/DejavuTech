@@ -11,22 +11,49 @@
                         <h3>Create Record</h3>
                     </div>
                     <div class="card-body">
+
+                        {{-- start  --}}
+                        <div class="modal fade" id="responseModal" tabindex="-1" role="dialog" aria-labelledby="responseModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="responseModalLabel">Server Response</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  <pre id="response"></pre>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        {{-- end --}}
                         <form id="myForm" action="{{ route('submitRecord') }}" method="POST">
                             @csrf
 
-                            <div class="form-group">
-                                <label for="date_created">Date Created:</label>
-                                <input type="datetime-local" name="date_created" id="date_created" class="form-control @error('date_created') is-invalid @enderror" value="{{ old('date_created') }}" required>
-                                @error('date_created')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            
 
                             <div class="form-group">
-                                <label for="username">Username:</label>
-                                <input type="text" name="username" id="username" class="form-control @error('username') is-invalid @enderror" value="{{ old('username') }}" required>
-                                @error('username')
+                              <label for="username">Username:</label>
+                              <input type="text" name="username" id="username" class="form-control @error('username') is-invalid @enderror" value="{{ old('username') }}" required>
+                              @error('username')
+                                  <div class="invalid-feedback">{{ $message }}</div>
+                              @enderror
+                            </div>
+
+                            <div class="form-group">
+                                <label for="date_created">Date Created:</label>
+                                
+                                <div class="input-group date" id="datetimepicker" data-target-input="nearest">
+                                    <input type="text" id="date_created" name="date_created" class="form-control datetimepicker-input" data-target="#datetimepicker"/>
+                                    <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
+                                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                  </div>
+                                @error('date_created')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -83,56 +110,77 @@
                         </div>
                         
                         <script>
+                          $(document).ready(function() {
+    // show modal when button is clicked
+    $('#show-modal-button').click(function() {
+        $('#myModal').modal('show');
+    });
+    
+    // hide modal when close button or outside the modal is clicked
+    $('#myModal').on('hidden.bs.modal', function () {
+        $(this).find('form')[0].reset();
+    });
+    
+    // hide modal when close button or outside the modal is clicked
+    $(document).on('click', function(event) {
+        if ($(event.target).hasClass('modal') || $(event.target).hasClass('close')) {
+            $('#myModal').modal('hide');
+        }
+    });
+});
+
+
+
+
                             const dateInput = document.getElementById('date_created');
                             dateInput.addEventListener('input', () => {
                                 dateInput.blur(); // close the calendar
                             });
-                            // Get the modal element
-                            var modal = document.getElementById('myModal');
-                    
-                            // Get the close button element
-                            // var closeBtn = document.getElementsByClassName('close')[0];
-                            var closeBtn = document.getElementsByClassName('btn btn-default')[0];
-                    
-                            // // When the form is submitted, show the modal with the API response
-                            @if(isset($response))
-                            modal.style.display = 'block';
-                            @endif
-                    
-                            // // When the user clicks on the close button, hide the modal
-                            closeBtn.onclick = function() {
-                                modal.style.display = 'none';
-                            }
+
+
 
                             $(document).ready(function() {
-                                $('#myForm').submit(function(e) {
-                                    e.preventDefault();
-                                    var data = {
-                                        date_created: $('#date_created').val(),
-                                        username: $('#username').val(),
-                                        product: $('#product').val(),
-                                        current_quantity: $('#current_quantity').val(),
-                                        transfered_qty: $('#transfered_qty').val(),
-                                        department: $('#department').val()
-                                    };
-                                    $.ajax({
-                                        type: 'POST',
-                                        url: 'https://dejavutechkenya.com/dejavuurls/dejavuurls.php',
-                                        data: JSON.stringify(data),
-                                        contentType: 'application/json',
-                                        success: function(response) {
-                                            $('#myModal .modal-body').html(response);
-                                            $('#myModal').modal('show');
-                                        },
-                                        error: function(response) {
-                                            $('#myModal .modal-body').html('Error: ' + response.statusText);
-                                            $('#myModal').modal('show');
-                                        }
-                                    });
+                            $('#myForm').submit(function(e) {
+                              e.preventDefault();
+   
+                            // Get the value of the datetime input field
+                            let datetime = $('#date_created').val();
+
+                            // Create a new Date object from the datetime value
+                            let date = new Date(datetime);
+
+                            // Format the date as a string in the desired format with seconds
+                            let formattedDate = date.getFullYear() + '-' + 
+                                                ('0' + (date.getMonth() + 1)).slice(-2) + '-' + 
+                                                ('0' + date.getDate()).slice(-2) + ' ' +
+                                                ('0' + date.getHours()).slice(-2) + ':' + 
+                                                ('0' + date.getMinutes()).slice(-2) + ':' + 
+                                                ('0' + date.getSeconds()).slice(-2);
+
+                            // Set the value of the date input field to the formatted date
+                            $('#date_created').val(formattedDate);
+
+
+                                console.log(formattedDate)
+
+                                // Submit the form
+                                $.ajax({
+                                  type: 'POST',
+                                  url: $(this).attr('action'),
+                                  data: $(this).serialize(),
+                                  success: function(response) {
+                                    $('#response').text(response);
+                                    $('#responseModal').modal('show');
+                                  },
+                                  error: function() {
+                                    alert('An error occurred while submitting the form.');
+                                  }
                                 });
+                              });
                             });
 
                         </script>
+
                     </div>
                 </div>
             </div>

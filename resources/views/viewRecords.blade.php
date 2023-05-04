@@ -19,6 +19,7 @@
             <tbody>
                 @foreach($records  as $inventories)
                 @foreach($inventories as $record)
+                <?php var_dump($record); break; ?>
                 <tr>
                     <td>{{ $record['date_created'] }}</td>
                     <td>{{ $record['username'] }}</td>

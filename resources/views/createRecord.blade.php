@@ -47,11 +47,17 @@
                             <div class="form-group">
                                 <label for="date_created">Date Created:</label>
                                 
-                                <div class="input-group date" id="datetimepicker" data-target-input="nearest">
+                                {{-- <div class="input-group date" id="datetimepicker" data-target-input="nearest">
                                     <input type="text" id="date_created" name="date_created" class="form-control datetimepicker-input" data-target="#datetimepicker"/>
                                     <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
                                       <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                     </div>
+                                  </div> --}}
+                                  <div class="input-group date" id="datetimepicker" data-target-input="nearest">
+                                    <input type="datetime-local" id="date_created" name="date_created" class="form-control datetimepicker-input" data-target="#datetimepicker"/>
+                                    {{-- <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker"> --}}
+                                      {{-- <div class="input-group-text"><i class="fa fa-calendar"></i></div> --}}
+                                    {{-- </div> --}}
                                   </div>
                                 @error('date_created')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -94,7 +100,7 @@
                                 <button type="submit" class="btn btn-primary mt-2">Submit</button>
                             </div>
                         </form>
-                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        {{-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -107,77 +113,89 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
+                        
                         
                         <script>
+
+
+                            jQuery('#datetimepicker3').datepicker({
+                                format:'d.m.Y H:i',
+                                inline:true,
+                            });
+
+
+
                           $(document).ready(function() {
-    // show modal when button is clicked
-    $('#show-modal-button').click(function() {
-        $('#myModal').modal('show');
-    });
-    
-    // hide modal when close button or outside the modal is clicked
-    $('#myModal').on('hidden.bs.modal', function () {
-        $(this).find('form')[0].reset();
-    });
-    
-    // hide modal when close button or outside the modal is clicked
-    $(document).on('click', function(event) {
-        if ($(event.target).hasClass('modal') || $(event.target).hasClass('close')) {
-            $('#myModal').modal('hide');
-        }
-    });
-});
+                            // show modal when button is clicked
+                            $('#show-modal-button').click(function() {
+                                $('#myModal').modal('show');
+                            });
+                            
+                            // hide modal when close button or outside the modal is clicked
+                            $('#myModal').on('hidden.bs.modal', function () {
+                                $(this).find('form')[0].reset();
+                            });
+                            
+                            // hide modal when close button or outside the modal is clicked
+                            $(document).on('click', function(event) {
+                                if ($(event.target).hasClass('modal') || $(event.target).hasClass('close')) {
+                                    $('#myModal').modal('hide');
+                                }
+                            });
+                        });
 
 
 
 
                             const dateInput = document.getElementById('date_created');
                             dateInput.addEventListener('input', () => {
-                                dateInput.blur(); // close the calendar
+                                dateInput.blur(); 
                             });
 
+                            function convertDateTime(dateTimeStr) {
+                                // Split the date and time components
+                                const [date, time] = dateTimeStr.split('T');
 
+                                // Extract the hour and minute components from the time
+                                const [hour, minute] = time.split(':');
+
+                                // Combine the date and time components with the seconds component set to 00
+                                const formattedDateTime = `${date} ${hour}:${minute}:00`;
+
+                                return formattedDateTime;
+                            }
+
+                           
 
                             $(document).ready(function() {
                             $('#myForm').submit(function(e) {
-                              e.preventDefault();
-   
-                            // Get the value of the datetime input field
-                            let datetime = $('#date_created').val();
+                                e.preventDefault();
 
-                            // Create a new Date object from the datetime value
-                            let date = new Date(datetime);
+                                // Get the value of the datetime input field
+                                let datetime = $('#date_created').val();
 
-                            // Format the date as a string in the desired format with seconds
-                            let formattedDate = date.getFullYear() + '-' + 
-                                                ('0' + (date.getMonth() + 1)).slice(-2) + '-' + 
-                                                ('0' + date.getDate()).slice(-2) + ' ' +
-                                                ('0' + date.getHours()).slice(-2) + ':' + 
-                                                ('0' + date.getMinutes()).slice(-2) + ':' + 
-                                                ('0' + date.getSeconds()).slice(-2);
+                                // Convert the datetime to the desired format
+                                let newdatetime = convertDateTime(datetime);
 
-                            // Set the value of the date input field to the formatted date
-                            $('#date_created').val(formattedDate);
+                                // Set the datetime to the converted value
+                                $('#date_created').val(newdatetime);
 
-
-                                console.log(formattedDate)
-
-                                // Submit the form
                                 $.ajax({
-                                  type: 'POST',
-                                  url: $(this).attr('action'),
-                                  data: $(this).serialize(),
-                                  success: function(response) {
+                                type: 'POST',
+                                url: $(this).attr('action'),
+                                data: $(this).serialize(),
+                                success: function(response) {
                                     $('#response').text(response);
                                     $('#responseModal').modal('show');
-                                  },
-                                  error: function() {
+                                },
+                                error: function() {
                                     alert('An error occurred while submitting the form.');
-                                  }
+                                }
                                 });
-                              });
                             });
+                            });
+
 
                         </script>
 

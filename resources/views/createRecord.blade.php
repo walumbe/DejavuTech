@@ -153,18 +153,32 @@
                                 dateInput.blur(); 
                             });
 
+                            // function convertDateTime(dateTimeStr) {
+                            //     // Split the date and time components
+                            //     const [date, time] = dateTimeStr.split('T');
+
+                            //     // Extract the hour and minute components from the time
+                            //     const [hour, minute] = time.split(':');
+
+                            //     // Combine the date and time components with the seconds component set to 00
+                            //     const formattedDateTime = `${date} ${hour}:${minute}:00`;
+
+                            //     return formattedDateTime;
+                            // }
+
                             function convertDateTime(dateTimeStr) {
-                                // Split the date and time components
-                                const [date, time] = dateTimeStr.split('T');
+  // Split the date and time components
+  const [date, time] = dateTimeStr.split('T');
 
-                                // Extract the hour and minute components from the time
-                                const [hour, minute] = time.split(':');
+  // Extract the hour and minute components from the time
+  const [hour, minute] = time.split(':');
 
-                                // Combine the date and time components with the seconds component set to 00
-                                const formattedDateTime = `${date} ${hour}:${minute}:00`;
+  // Combine the date and time components with the seconds component set to 00
+  const formattedDateTime = `${date} ${hour}:${minute}:00`;
 
-                                return formattedDateTime;
-                            }
+  return formattedDateTime;
+}
+
 
                            
 
@@ -173,13 +187,21 @@
                                 e.preventDefault();
 
                                 // Get the value of the datetime input field
-                                let datetime = $('#date_created').val();
+                                // let datetime = $('#date_created').val();
 
-                                // Convert the datetime to the desired format
-                                let newdatetime = convertDateTime(datetime);
+                                // // Convert the datetime to the desired format
+                                // let newdatetime = convertDateTime(datetime);
 
-                                // Set the datetime to the converted value
-                                $('#date_created').val(newdatetime);
+                                // // Set the datetime to the converted value
+                                // $('#date_created').val(newdatetime);
+
+                                const dateTimeStr = document.getElementById('date_created').value;
+
+// Convert the date-time string to the desired format
+const formattedDateTime = convertDateTime(dateTimeStr);
+
+// Set the modified value back to the input
+document.getElementById('date_created').value = formattedDateTime;
 
                                 $.ajax({
                                 type: 'POST',

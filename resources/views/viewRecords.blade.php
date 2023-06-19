@@ -17,8 +17,9 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($records  as $inventories)
-                @foreach($inventories as $record)
+                @foreach($records  as $record)
+                {{-- @foreach($records  as $inventories) --}}
+                {{-- @foreach($inventories as $record) --}}
                 
                 <tr>
                     <td>{{ $record['date_created'] }}</td>
@@ -28,7 +29,7 @@
                     <td>{{ $record['transfered_qty'] }}</td>
                     <td>{{ $record['department'] }}</td>
                 </tr>
-                @endforeach
+                {{-- @endforeach --}}
                 @endforeach
             </tbody>
         </table>

@@ -36,10 +36,10 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('createRecordPage') }}">Create Record</a>
+                            <a class="nav-link" href="/create-record">Create Record</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('viewRecords') }}">View Records</a>
+                            <a class="nav-link" href="/view-records">View Records</a>
                         </li>
                     </ul>
                 </div>
@@ -51,7 +51,7 @@
         @yield('content')
     </div>
 
-    <footer class="bg-light text-center py-3 footer fixed-bottom">
+    <footer class="bg-light text-center py-3 footer ">
         <p>DejavuTech &copy; {{date('Y')}}</p>
     </footer>
 

@@ -18,9 +18,11 @@ Route::get('/', function () {
     return redirect('/create-record');
 });
 
-Route::post('/submit-record', [PageController::class, 'submitRecord'])->name('submitRecord');
-Route::get('/view-records', [PageController::class, 'viewRecords'])->name('viewRecords');
-Route::get('/create-record', [PageController::class, 'createRecordPage'])->name('createRecordPage');
+Route::post('/submit-record', [PageController::class, 'submitRecord']);
+Route::get('/view-records', [PageController::class, 'viewRecords']);
+Route::get('/create-record', [PageController::class, 'createRecordPage']);
+Route::post('/save-record', [PageController::class, 'store']); 
+Route::get('/records', [PageController::class, 'getRecords']);
 
 
 
